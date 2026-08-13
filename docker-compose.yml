@@ -1,0 +1,13 @@
+name: sra_mongo
+services:
+  mongo:
+    image: mongo:7
+    container_name: sra-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - sra-mongo-data:/data/db
+    restart: unless-stopped
+
+volumes:
+  sra-mongo-data:
