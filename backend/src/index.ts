@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './modules/auth/routes';
+import requestRoutes from './modules/requests/routes';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/requests', requestRoutes);
 
 async function start() {
   try {
