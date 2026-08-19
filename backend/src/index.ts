@@ -6,6 +6,7 @@ import authRoutes from './modules/auth/routes';
 import requestRoutes from './modules/requests/routes';
 import { bikesGlobalRouter, bikesForRequestRouter } from './modules/bikes/routes';
 import checklistRoutes from './modules/checklist/routes';
+import feedbackRoutes from './modules/feedback/routes';
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use('/api/requests/:id/bikes', bikesForRequestRouter);
 
 app.use('/api/requests/:id/checklist', checklistRoutes);
 
+app.use('/api/feedback', feedbackRoutes);
 async function start() {
   try {
     await mongoose.connect(MONGO_URI);
