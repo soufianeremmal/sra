@@ -3,6 +3,9 @@ import { Request, IRequest, RequestStatus } from './models/request.model';
 import { AuditLog } from './models/audit-log.model';
 import { canTransition } from './state-machine';
 import { generateChecklistForRequest, isChecklistComplete, countUncheckedItems } from '../checklist/service';
+import { notifyRequestSubmitted } from '../notifications/notify-request-submitted.service';
+import { notifyStatusChanged } from '../notifications/notify-status-changed.service';
+import { User } from '../auth/model';
 export class TransitionError extends Error {
   constructor(message: string) {
     super(message);
@@ -98,6 +101,22 @@ export async function changeStatus(input: {
     comment: input.comment,
     metadata: { fromStatus: previousStatus, toStatus: input.newStatus },
   });
+  // Fire notifications (fire-and-forget, never blocks the response)
+  const requester = await User.findById(doc.requester);
+  if (requester) {
+    if (input.newStatus === 'À faire' && previousStatus === 'Draft') {
+      // Submission — notify the sampling team (channel + email + Notion)
+      notifyRequestSubmitted({ request: doc, requester });
+    } else {
+      // Ongoing status change — notify the requester
+      notifyStatusChanged({
+        request: doc,
+        requester,
+        previousStatus,
+        comment: input.comment,
+      });
+    }
+  }
 
   return doc;
 }

@@ -32,3 +32,31 @@ export async function fetchBikesFromNotion(): Promise<NotionBikeRow[]> {
   await new Promise((r) => setTimeout(r, 150));
   return STUB_BIKES;
 }
+
+// ---- Notion write side (NEW) ----
+// STUB — creates a page in the Sampling Notion database when a request is submitted.
+// When real Notion is provisioned, this becomes a call to the pages.create endpoint.
+
+export interface NotionRequestPagePayload {
+  requestId: string;
+  projectName: string;
+  city: string;
+  projectType: string;
+  requesterName: string;
+  status: string;
+  createdAt: Date;
+  sraUrl: string;
+}
+
+export async function createNotionPageForRequest(payload: NotionRequestPagePayload): Promise<void> {
+  await new Promise((r) => setTimeout(r, 120));
+
+  console.log('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓');
+  console.log(`[NOTION STUB] Creating page for request ${payload.requestId}`);
+  console.log(`[NOTION STUB]   Project: ${payload.projectName} (${payload.projectType})`);
+  console.log(`[NOTION STUB]   City: ${payload.city}`);
+  console.log(`[NOTION STUB]   Requester: ${payload.requesterName}`);
+  console.log(`[NOTION STUB]   Status: ${payload.status}`);
+  console.log(`[NOTION STUB]   Link: ${payload.sraUrl}`);
+  console.log('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓');
+}

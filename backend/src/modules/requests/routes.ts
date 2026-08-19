@@ -2,13 +2,14 @@ import { Router } from 'express';
 import { create, list, getOne, submit, updateStatus, update, remove } from './controller';
 import { requireAuth } from '../../shared/middlewares/require-auth';
 import { requireRole } from '../../shared/middlewares/require-role';
+import { create, list, getOne, submit, updateStatus, update, remove, generateEmail } from './controller';
 
 const router = Router();
 
 router.post('/', requireAuth, create);
 router.get('/', requireAuth, list);
 router.get('/:id', requireAuth, getOne);
-
+router.get('/:id/generate-email', requireAuth, generateEmail);
 // Marketing edits their own request fields (blocked when status = Terminé)
 router.patch('/:id', requireAuth, update);
 

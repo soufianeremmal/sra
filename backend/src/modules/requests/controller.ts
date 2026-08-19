@@ -10,7 +10,8 @@ import {
   TransitionError,
   PermissionError,
 } from './service';
-
+import { generateClientEmailForRequest } from '../notifications/email-generator.service';
+import { User } from '../auth/model';
 // NOTE: we alias Express's Request as ExpressRequest because we also have
 // our own Request Mongoose model — avoids naming collision.
 
@@ -194,4 +195,16 @@ export async function remove(req: ExpressRequest, res: Response) {
     if (err instanceof PermissionError) return res.status(403).json({ error: err.message });
     throw err;
   }
+}
+export async function generateEmail(req: ExpressRequest, res: Response) {
+  if (!req.user) return res.status(401).json({ error: 'Not authenticated' });
+
+  const doc = await getRequestById(req.params.id);
+  if (!doc) return res.status(404).json({ error: 'Request not found' });
+
+  const requester = await User.findById(doc.requester);
+  if (!requester) return res.status(404).json({ error: 'Requester not found' });
+
+  const email = generateClientEmailForRequest({ request: doc, requester });
+  return res.json(email);
 }
