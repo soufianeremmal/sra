@@ -36,7 +36,7 @@ export async function syncBikeInventory() {
         { sn: row.sn },
         {
           sn: row.sn,
-          model: row.model,
+          bikeModel: row.model,
           status: row.status,
           fifteenControlUrl: row.fifteenControlUrl,
           lastSyncedAt: now,
@@ -69,7 +69,7 @@ export async function getAvailability() {
 
   // Group inventory by status for the sampling dashboard tiles
   const grouped = await BikeInventory.aggregate([
-    { $group: { _id: '$status', count: { $sum: 1 }, bikes: { $push: { sn: '$sn', model: '$model' } } } },
+    { $group: { _id: '$status', count: { $sum: 1 }, bikes: { $push: { sn: '$sn', bikeModel: '$bikeModel' } } } },
     { $project: { _id: 0, status: '$_id', count: 1, bikes: 1 } },
   ]);
 
@@ -103,7 +103,7 @@ export async function assignBikeToRequest(input: {
   try {
     const assignment = await BikeAssignment.create({
       sn: bike.sn,
-      model: bike.model,
+      bikeModel: bike.bikeModel,
       fifteenControlUrl: bike.fifteenControlUrl,
       requestId: request._id,
       assignedBy: new Types.ObjectId(input.actorId),
@@ -115,7 +115,7 @@ export async function assignBikeToRequest(input: {
       action: 'bike_assigned',
       byUser: new Types.ObjectId(input.actorId),
       comment: `Assigned bike ${bike.sn}`,
-      metadata: { sn: bike.sn, model: bike.model },
+      metadata: { sn: bike.sn, bikeModel: bike.bikeModel },
     });
 
     return assignment;

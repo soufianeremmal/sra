@@ -4,7 +4,7 @@ import { BikeModel } from './bike-inventory.model';
 export interface IBikeAssignment extends Document {
   _id: Types.ObjectId;
   sn: string;
-  model: BikeModel;                  // denormalized snapshot at assignment time
+  bikeModel: BikeModel;               // denormalized snapshot at assignment time
   fifteenControlUrl?: string;         // denormalized snapshot
   requestId: Types.ObjectId;
   assignedBy: Types.ObjectId;
@@ -14,7 +14,7 @@ export interface IBikeAssignment extends Document {
 const bikeAssignmentSchema = new Schema<IBikeAssignment>(
   {
     sn: { type: String, required: true, uppercase: true, trim: true },
-    model: {
+    bikeModel: {
       type: String,
       enum: ['Fusion 1', 'Fusion 1.5', 'Fusion 2'],
       required: true,

@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { create, list, getOne, submit, updateStatus, update, remove } from './controller';
 import { requireAuth } from '../../shared/middlewares/require-auth';
 import { requireRole } from '../../shared/middlewares/require-role';
 import { create, list, getOne, submit, updateStatus, update, remove, generateEmail } from './controller';

@@ -14,7 +14,7 @@ export type BikeInventoryStatus =
 export interface IBikeInventory extends Document {
   _id: Types.ObjectId;
   sn: string;
-  model: BikeModel;
+  bikeModel: BikeModel;
   status: BikeInventoryStatus;
   fifteenControlUrl?: string;
   lastSyncedAt: Date;
@@ -25,7 +25,7 @@ export interface IBikeInventory extends Document {
 const bikeInventorySchema = new Schema<IBikeInventory>(
   {
     sn: { type: String, required: true, unique: true, trim: true, uppercase: true },
-    model: {
+    bikeModel: {
       type: String,
       enum: ['Fusion 1', 'Fusion 1.5', 'Fusion 2'],
       required: true,

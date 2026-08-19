@@ -82,11 +82,11 @@ const stationSectionSchema = new Schema<IStationSection>(
 );
 
 export interface IAccessoriesSection {
-  phone: number;
-  batteryCharger: number;
-  additionalBattery: number;
-  rfidCard: number;
-  marketingMaterial: IMarketingMaterialItem[];
+  phone?: number;
+  batteryCharger?: number;
+  additionalBattery?: number;
+  rfidCard?: number;
+  marketingMaterial?: IMarketingMaterialItem[];
 }
 
 const accessoriesSectionSchema = new Schema<IAccessoriesSection>(
@@ -101,7 +101,7 @@ const accessoriesSectionSchema = new Schema<IAccessoriesSection>(
 );
 
 export interface ILogistics {
-  deliverByRequester: boolean;
+  deliverByRequester?: boolean;
   companyName?: string;
   deliveryContactName?: string;
   deliveryContactPhone?: string;
@@ -114,7 +114,7 @@ export interface ILogistics {
 
 const logisticsSchema = new Schema<ILogistics>(
   {
-    deliverByRequester: { type: Boolean, required: true, default: false },
+    deliverByRequester: { type: Boolean, default: false },
     companyName: { type: String, trim: true },
     deliveryContactName: { type: String, trim: true },
     deliveryContactPhone: { type: String, trim: true },
