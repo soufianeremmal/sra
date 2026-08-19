@@ -1,6 +1,14 @@
 import { Types } from 'mongoose';
-import { Request, IRequest } from './models/request.model';
+import { Request, IRequest, RequestStatus } from './models/request.model';
 import { AuditLog } from './models/audit-log.model';
+import { canTransition } from './state-machine';
+
+export class TransitionError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'TransitionError';
+  }
+}
 
 export async function createDraft(input: {
   requesterId: string;
@@ -29,10 +37,8 @@ export async function createDraft(input: {
   return doc;
 }
 
-export async function listRequests(currentUser: { userId: string; role: string }) {
-  // Marketing sees all requests (per your design — 'Toutes les demandes' view)
-  // Sampling also sees all requests
-  // Both get the same list for now; per-user filtering can be added later
+// Parameter prefixed with _ to signal "unused for now, will be used later for per-user filtering"
+export async function listRequests(_currentUser: { userId: string; role: string }) {
   return Request.find()
     .populate('requester', 'name email role')
     .sort({ createdAt: -1 });
@@ -41,4 +47,142 @@ export async function listRequests(currentUser: { userId: string; role: string }
 export async function getRequestById(id: string) {
   if (!Types.ObjectId.isValid(id)) return null;
   return Request.findById(id).populate('requester', 'name email role');
+}
+
+export async function changeStatus(input: {
+  requestId: string;
+  newStatus: RequestStatus;
+  actorId: string;
+  comment: string;
+}) {
+  if (!Types.ObjectId.isValid(input.requestId)) {
+    throw new TransitionError('Invalid request id');
+  }
+
+  const doc = await Request.findById(input.requestId);
+  if (!doc) throw new TransitionError('Request not found');
+
+  if (!canTransition(doc.status, input.newStatus)) {
+    throw new TransitionError(
+      `Illegal transition: ${doc.status} → ${input.newStatus}`
+    );
+  }
+
+  const previousStatus = doc.status;
+  doc.status = input.newStatus;
+  await doc.save();
+
+  await AuditLog.create({
+    requestId: doc._id,
+    action:
+      input.newStatus === 'À faire' && previousStatus === 'Draft'
+        ? 'submitted'
+        : 'status_changed',
+    byUser: new Types.ObjectId(input.actorId),
+    comment: input.comment,
+    metadata: { fromStatus: previousStatus, toStatus: input.newStatus },
+  });
+
+  return doc;
+}
+
+export class PermissionError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'PermissionError';
+  }
+}
+
+// Fields Marketing is allowed to update. Everything else is forbidden.
+// Kept as an explicit list, not derived from the schema, so nobody adds a
+// sensitive field to the model and accidentally makes it Marketing-writable.
+const MARKETING_EDITABLE_FIELDS = [
+  'projectName',
+  'city',
+  'projectType',
+  'logistics',
+  'bikes',
+  'station',
+  'accessories',
+  'comment',
+] as const;
+
+type MarketingEditableField = (typeof MARKETING_EDITABLE_FIELDS)[number];
+type MarketingUpdatePayload = Partial<Pick<IRequest, MarketingEditableField>>;
+
+export async function updateRequestFields(input: {
+  requestId: string;
+  actorId: string;
+  updates: MarketingUpdatePayload;
+}) {
+  if (!Types.ObjectId.isValid(input.requestId)) {
+    throw new PermissionError('Invalid request id');
+  }
+
+  const doc = await Request.findById(input.requestId);
+  if (!doc) throw new PermissionError('Request not found');
+
+  if (doc.status === 'Terminé') {
+    throw new PermissionError('This request is finalized and cannot be edited');
+  }
+
+  // Enforce: whatever the client sent, only apply keys that are in our allow-list.
+  // This is defense-in-depth on top of Zod validation.
+  const applied: string[] = [];
+  for (const key of MARKETING_EDITABLE_FIELDS) {
+    if (key in input.updates && input.updates[key] !== undefined) {
+      // Cast is safe here — TS can't see through the string index, but the allow-list guarantees the shape.
+      (doc as unknown as Record<string, unknown>)[key] = input.updates[key];
+      applied.push(key);
+    }
+  }
+
+  if (applied.length === 0) {
+    // Client sent a body but nothing valid to update — return the doc unchanged
+    return doc;
+  }
+
+  await doc.save();
+
+  await AuditLog.create({
+    requestId: doc._id,
+    action: 'field_updated',
+    byUser: new Types.ObjectId(input.actorId),
+    comment: `Updated fields: ${applied.join(', ')}`,
+    metadata: { updatedFields: applied },
+  });
+
+  return doc;
+}
+
+export async function deleteRequest(input: {
+  requestId: string;
+  actor: { userId: string; role: string };
+}) {
+  if (!Types.ObjectId.isValid(input.requestId)) {
+    throw new PermissionError('Invalid request id');
+  }
+
+  const doc = await Request.findById(input.requestId);
+  if (!doc) throw new PermissionError('Request not found');
+
+  const isSampling = input.actor.role === 'sampling_admin';
+  const isOwnDraft =
+    doc.status === 'Draft' &&
+    doc.requester.toString() === input.actor.userId;
+
+  if (!isSampling && !isOwnDraft) {
+    throw new PermissionError('You cannot delete this request');
+  }
+
+  await AuditLog.create({
+    requestId: doc._id,
+    action: 'deleted',
+    byUser: new Types.ObjectId(input.actor.userId),
+    comment: isSampling ? 'Deleted by Sampling' : 'Draft deleted by requester',
+    metadata: { statusAtDeletion: doc.status },
+  });
+
+  await doc.deleteOne();
+  return { deleted: true };
 }

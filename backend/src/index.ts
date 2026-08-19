@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './modules/auth/routes';
 import requestRoutes from './modules/requests/routes';
+import { bikesGlobalRouter, bikesForRequestRouter } from './modules/bikes/routes';
 
 dotenv.config();
 
@@ -20,6 +21,9 @@ app.get('/api/health', (_req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/requests', requestRoutes);
+
+app.use('/api/bikes', bikesGlobalRouter);
+app.use('/api/requests/:id/bikes', bikesForRequestRouter);
 
 async function start() {
   try {

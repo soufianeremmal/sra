@@ -22,4 +22,4 @@ export async function login(req: Request, res: Response) {
 }
 export async function me(req: Request, res: Response) {
   return res.json({ user: req.user });
-}
+} 

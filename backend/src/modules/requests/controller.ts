@@ -1,14 +1,88 @@
 import { Request as ExpressRequest, Response } from 'express';
 import { z } from 'zod';
-import { createDraft, listRequests, getRequestById } from './service';
+import {
+  createDraft,
+  listRequests,
+  getRequestById,
+  changeStatus,
+  updateRequestFields,
+  deleteRequest,
+  TransitionError,
+  PermissionError,
+} from './service';
 
 // NOTE: we alias Express's Request as ExpressRequest because we also have
 // our own Request Mongoose model — avoids naming collision.
+
+// All fields optional — Marketing PATCHes partially, only sends what changed
+const updateFieldsSchema = z.object({
+  projectName: z.string().min(1).optional(),
+  city: z.string().min(1).optional(),
+  projectType: z.enum(['Sample', 'Démo', 'Salon', 'AO']).optional(),
+  logistics: z.object({
+    deliverByRequester: z.boolean().optional(),
+    companyName: z.string().optional(),
+    deliveryContactName: z.string().optional(),
+    deliveryContactPhone: z.string().optional(),
+    deliveryAddress: z.string().optional(),
+    deliveryLatestDate: z.coerce.date().optional(),
+    deliveryTimeSlot: z.string().optional(),
+    returnDate: z.coerce.date().optional(),
+    returnTimeSlot: z.string().optional(),
+  }).optional(),
+  bikes: z.array(z.object({
+    bikeType: z.enum(['Fusion 1', 'Fusion 1.5', 'Fusion 2']),
+    stickersType: z.enum(['Standard', 'Custom', 'None']),
+    luggageRack: z.boolean(),
+    heavyLock: z.boolean(),
+    lockTo: z.enum(['Frame', 'Front wheel', 'Both']),
+  })).optional(),
+  station: z.object({
+    stationNeeded: z.boolean(),
+    stationType: z.enum(['e-dock', 'Maintenance dock']).optional(),
+    needsCharging: z.boolean().optional(),
+    stationQuantity: z.number().int().min(0).optional(),
+    maintenanceDock: z.number().int().min(0).optional(),
+    weightPlate: z.number().int().min(0).optional(),
+    guidingBand: z.number().int().min(0).optional(),
+    stickers: z.number().int().min(0).optional(),
+    totem: z.number().int().min(0).optional(),
+  }).optional(),
+  accessories: z.object({
+    phone: z.number().int().min(0).optional(),
+    batteryCharger: z.number().int().min(0).optional(),
+    additionalBattery: z.number().int().min(0).optional(),
+    rfidCard: z.number().int().min(0).optional(),
+    marketingMaterial: z.array(z.object({
+      item: z.string().min(1),
+      quantity: z.number().int().min(0),
+    })).optional(),
+  }).optional(),
+  comment: z.string().optional(),
+});
 
 const createDraftSchema = z.object({
   projectName: z.string().min(1),
   city: z.string().min(1),
   projectType: z.enum(['Sample', 'Démo', 'Salon', 'AO']),
+});
+
+const changeStatusSchema = z.object({
+  newStatus: z.enum([
+    'Draft',
+    'À faire',
+    'En cours',
+    'Prêt à tester',
+    'Emballé',
+    'Prêt à enlever',
+    'Expédié',
+    'Terminé',
+  ]),
+  comment: z.string().min(1, 'Comment is required for every status change'),
+});
+
+const submitSchema = z.object({
+  comment: z.string().min(1, 'Comment is required to submit'),
 });
 
 export async function create(req: ExpressRequest, res: Response) {
@@ -41,4 +115,83 @@ export async function getOne(req: ExpressRequest, res: Response) {
   if (!doc) return res.status(404).json({ error: 'Request not found' });
 
   return res.json(doc);
+}
+
+export async function submit(req: ExpressRequest, res: Response) {
+  if (!req.user) return res.status(401).json({ error: 'Not authenticated' });
+
+  const parsed = submitSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: 'Invalid input', details: parsed.error.issues });
+  }
+
+  try {
+    const doc = await changeStatus({
+      requestId: req.params.id,
+      newStatus: 'À faire',
+      actorId: req.user.userId,
+      comment: parsed.data.comment,
+    });
+    return res.json(doc);
+  } catch (err) {
+    if (err instanceof TransitionError) return res.status(400).json({ error: err.message });
+    throw err;
+  }
+}
+
+export async function updateStatus(req: ExpressRequest, res: Response) {
+  if (!req.user) return res.status(401).json({ error: 'Not authenticated' });
+
+  const parsed = changeStatusSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: 'Invalid input', details: parsed.error.issues });
+  }
+
+  try {
+    const doc = await changeStatus({
+      requestId: req.params.id,
+      newStatus: parsed.data.newStatus,
+      actorId: req.user.userId,
+      comment: parsed.data.comment,
+    });
+    return res.json(doc);
+  } catch (err) {
+    if (err instanceof TransitionError) return res.status(400).json({ error: err.message });
+    throw err;
+  }
+}
+export async function update(req: ExpressRequest, res: Response) {
+  if (!req.user) return res.status(401).json({ error: 'Not authenticated' });
+
+  const parsed = updateFieldsSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: 'Invalid input', details: parsed.error.issues });
+  }
+
+  try {
+    const doc = await updateRequestFields({
+      requestId: req.params.id,
+      actorId: req.user.userId,
+      updates: parsed.data,
+    });
+    return res.json(doc);
+  } catch (err) {
+    if (err instanceof PermissionError) return res.status(403).json({ error: err.message });
+    throw err;
+  }
+}
+
+export async function remove(req: ExpressRequest, res: Response) {
+  if (!req.user) return res.status(401).json({ error: 'Not authenticated' });
+
+  try {
+    const result = await deleteRequest({
+      requestId: req.params.id,
+      actor: req.user,
+    });
+    return res.json(result);
+  } catch (err) {
+    if (err instanceof PermissionError) return res.status(403).json({ error: err.message });
+    throw err;
+  }
 }
