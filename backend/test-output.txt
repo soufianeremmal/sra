@@ -1,0 +1,737 @@
+
+> backend@1.0.0 test
+> vitest run
+
+[33m(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.[39m
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.11 [39m[90mC:/Users/Soufiane REMMAL/Projects/SRA_Web/backend[39m
+
+[90mstdout[2m | tests/bikes.test.ts
+[22m[39m◇ injected env (2) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+
+ [32m✓[39m tests/bikes.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 5523[2mms[22m[39m
+     [33m[2m✓[22m[39m populates inventory from Notion stub (12 bikes) [33m 758[2mms[22m[39m
+     [33m[2m✓[22m[39m returns bikes grouped by status [33m 528[2mms[22m[39m
+     [33m[2m✓[22m[39m Sampling can assign an available bike [33m 880[2mms[22m[39m
+     [33m[2m✓[22m[39m Marketing cannot assign bikes (403) [33m 937[2mms[22m[39m
+     [33m[2m✓[22m[39m refuses double-assignment [33m 783[2mms[22m[39m
+     [33m[2m✓[22m[39m refuses to assign an unavailable bike (e.g. status: On AO) [33m 737[2mms[22m[39m
+     [33m[2m✓[22m[39m Sampling can unassign [33m 728[2mms[22m[39m
+[90mstdout[2m | tests/requests.test.ts
+[22m[39m◇ injected env (2) from .env // tip: ⌘ enable debugging { debug: true }
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mPATCH /api/requests/:id/submit[2m > [22m[2mrejects submit without a comment
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: test-sampling@example.com
+[GMAIL STUB] Subject: [SRA] Nouvelle demande : Test project
+[GMAIL STUB] Body:
+Une nouvelle demande de sampling a été soumise.
+
+Projet : Test project
+Type : AO
+Ville : Paris
+Demandeur : Marketing Test User (marketing-test@fifteen.eu)
+Nombre de vélos : 0
+Date de livraison souhaitée : à confirmer
+
+Voir dans SRA : http://localhost:3000/requests/6a85b5d0be6902cc70020b20
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mPATCH /api/requests/:id/submit[2m > [22m[2mrejects submit without a comment
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+🆕 Nouvelle demande de sampling
+*Test project* (AO) — Marketing Test User
+0 vélo(s) — livraison à Paris pour le à confirmer
+<http://localhost:3000/requests/6a85b5d0be6902cc70020b20|Voir dans SRA>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mPATCH /api/requests/:id/submit[2m > [22m[2mrejects submit without a comment
+[22m[39m▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+[NOTION STUB] Creating page for request 6a85b5d0be6902cc70020b20
+[NOTION STUB]   Project: Test project (AO)
+[NOTION STUB]   City: Paris
+[NOTION STUB]   Requester: Marketing Test User
+[NOTION STUB]   Status: À faire
+[NOTION STUB]   Link: http://localhost:3000/requests/6a85b5d0be6902cc70020b20
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mPATCH /api/requests/:id/status[2m > [22m[2mSampling can advance status
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: test-sampling@example.com
+[GMAIL STUB] Subject: [SRA] Nouvelle demande : Test project
+[GMAIL STUB] Body:
+Une nouvelle demande de sampling a été soumise.
+
+Projet : Test project
+Type : AO
+Ville : Paris
+Demandeur : Marketing Test User (marketing-test@fifteen.eu)
+Nombre de vélos : 0
+Date de livraison souhaitée : à confirmer
+
+Voir dans SRA : http://localhost:3000/requests/6a85b5d1be6902cc70020b27
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mPATCH /api/requests/:id/status[2m > [22m[2mSampling can advance status
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+🆕 Nouvelle demande de sampling
+*Test project* (AO) — Marketing Test User
+0 vélo(s) — livraison à Paris pour le à confirmer
+<http://localhost:3000/requests/6a85b5d1be6902cc70020b27|Voir dans SRA>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mPATCH /api/requests/:id/status[2m > [22m[2mSampling can advance status
+[22m[39m▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+[NOTION STUB] Creating page for request 6a85b5d1be6902cc70020b27
+[NOTION STUB]   Project: Test project (AO)
+[NOTION STUB]   City: Paris
+[NOTION STUB]   Requester: Marketing Test User
+[NOTION STUB]   Status: À faire
+[NOTION STUB]   Link: http://localhost:3000/requests/6a85b5d1be6902cc70020b27
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mPATCH /api/requests/:id/status[2m > [22m[2mblocks illegal transitions with 400
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: test-sampling@example.com
+[GMAIL STUB] Subject: [SRA] Nouvelle demande : Test project
+[GMAIL STUB] Body:
+Une nouvelle demande de sampling a été soumise.
+
+Projet : Test project
+Type : AO
+Ville : Paris
+Demandeur : Marketing Test User (marketing-test@fifteen.eu)
+Nombre de vélos : 0
+Date de livraison souhaitée : à confirmer
+
+Voir dans SRA : http://localhost:3000/requests/6a85b5d2be6902cc70020b2c
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mPATCH /api/requests/:id/status[2m > [22m[2mblocks illegal transitions with 400
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: marketing-test@fifteen.eu
+[GMAIL STUB] Subject: [SRA] Test project : En cours
+[GMAIL STUB] Body:
+Bonjour Marketing Test User,
+
+Le statut de votre demande "Test project" a été mis à jour.
+
+Nouveau statut : En cours
+Statut précédent : À faire
+Commentaire : starting
+
+Voir la demande : http://localhost:3000/requests/6a85b5d2be6902cc70020b2c
+
+L'équipe Sampling
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mPATCH /api/requests/:id/status[2m > [22m[2mblocks illegal transitions with 400
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+🆕 Nouvelle demande de sampling
+*Test project* (AO) — Marketing Test User
+0 vélo(s) — livraison à Paris pour le à confirmer
+<http://localhost:3000/requests/6a85b5d2be6902cc70020b2c|Voir dans SRA>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mPATCH /api/requests/:id/status[2m > [22m[2mblocks illegal transitions with 400
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+📌 Statut mis à jour pour *Test project*
+À faire → *En cours*
+_"starting"_
+<http://localhost:3000/requests/6a85b5d2be6902cc70020b2c|Voir la demande>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mPATCH /api/requests/:id/status[2m > [22m[2mblocks illegal transitions with 400
+[22m[39m▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+[NOTION STUB] Creating page for request 6a85b5d2be6902cc70020b2c
+[NOTION STUB]   Project: Test project (AO)
+[NOTION STUB]   City: Paris
+[NOTION STUB]   Requester: Marketing Test User
+[NOTION STUB]   Status: À faire
+[NOTION STUB]   Link: http://localhost:3000/requests/6a85b5d2be6902cc70020b2c
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mPATCH /api/requests/:id (edit fields)[2m > [22m[2mMarketing can edit their draft fields
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+🆕 Nouvelle demande de sampling
+*Test project* (AO) — Marketing Test User
+0 vélo(s) — livraison à Paris pour le à confirmer
+<http://localhost:3000/requests/6a85b5d2be6902cc70020b51|Voir dans SRA>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mPATCH /api/requests/:id (edit fields)[2m > [22m[2mMarketing can edit their draft fields
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+📌 Statut mis à jour pour *Test project*
+À faire → *En cours*
+_"starting"_
+<http://localhost:3000/requests/6a85b5d2be6902cc70020b51|Voir la demande>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mPATCH /api/requests/:id (edit fields)[2m > [22m[2mMarketing can edit their draft fields
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: test-sampling@example.com
+[GMAIL STUB] Subject: [SRA] Nouvelle demande : Test project
+[GMAIL STUB] Body:
+Une nouvelle demande de sampling a été soumise.
+
+Projet : Test project
+Type : AO
+Ville : Paris
+Demandeur : Marketing Test User (marketing-test@fifteen.eu)
+Nombre de vélos : 0
+Date de livraison souhaitée : à confirmer
+
+Voir dans SRA : http://localhost:3000/requests/6a85b5d2be6902cc70020b51
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mPATCH /api/requests/:id (edit fields)[2m > [22m[2mMarketing can edit their draft fields
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: marketing-test@fifteen.eu
+[GMAIL STUB] Subject: [SRA] Test project : En cours
+[GMAIL STUB] Body:
+Bonjour Marketing Test User,
+
+Le statut de votre demande "Test project" a été mis à jour.
+
+Nouveau statut : En cours
+Statut précédent : À faire
+Commentaire : starting
+
+Voir la demande : http://localhost:3000/requests/6a85b5d2be6902cc70020b51
+
+L'équipe Sampling
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mPATCH /api/requests/:id (edit fields)[2m > [22m[2mMarketing can edit their draft fields
+[22m[39m▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+[NOTION STUB] Creating page for request 6a85b5d2be6902cc70020b51
+[NOTION STUB]   Project: Test project (AO)
+[NOTION STUB]   City: Paris
+[NOTION STUB]   Requester: Marketing Test User
+[NOTION STUB]   Status: À faire
+[NOTION STUB]   Link: http://localhost:3000/requests/6a85b5d2be6902cc70020b51
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mDELETE /api/requests/:id[2m > [22m[2mSampling can delete any request
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: test-sampling@example.com
+[GMAIL STUB] Subject: [SRA] Nouvelle demande : Test project
+[GMAIL STUB] Body:
+Une nouvelle demande de sampling a été soumise.
+
+Projet : Test project
+Type : AO
+Ville : Paris
+Demandeur : Marketing Test User (marketing-test@fifteen.eu)
+Nombre de vélos : 0
+Date de livraison souhaitée : à confirmer
+
+Voir dans SRA : http://localhost:3000/requests/6a85b5d3be6902cc70020b81
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mDELETE /api/requests/:id[2m > [22m[2mSampling can delete any request
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+🆕 Nouvelle demande de sampling
+*Test project* (AO) — Marketing Test User
+0 vélo(s) — livraison à Paris pour le à confirmer
+<http://localhost:3000/requests/6a85b5d3be6902cc70020b81|Voir dans SRA>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/requests.test.ts[2m > [22m[2mDELETE /api/requests/:id[2m > [22m[2mSampling can delete any request
+[22m[39m▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+[NOTION STUB] Creating page for request 6a85b5d3be6902cc70020b81
+[NOTION STUB]   Project: Test project (AO)
+[NOTION STUB]   City: Paris
+[NOTION STUB]   Requester: Marketing Test User
+[NOTION STUB]   Status: À faire
+[NOTION STUB]   Link: http://localhost:3000/requests/6a85b5d3be6902cc70020b81
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+ [32m✓[39m tests/requests.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 5214[2mms[22m[39m
+     [33m[2m✓[22m[39m creates a draft with status "Draft" and audit entry [33m 549[2mms[22m[39m
+     [33m[2m✓[22m[39m moves Draft to À faire with a comment [33m 331[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects submit without a comment [33m 307[2mms[22m[39m
+     [33m[2m✓[22m[39m Sampling can advance status [33m 762[2mms[22m[39m
+     [33m[2m✓[22m[39m blocks illegal transitions with 400 [33m 603[2mms[22m[39m
+     [33m[2m✓[22m[39m Marketing can edit their draft fields [33m 304[2mms[22m[39m
+     [33m[2m✓[22m[39m Marketing can delete their own draft [33m 335[2mms[22m[39m
+     [33m[2m✓[22m[39m Marketing cannot delete a submitted request [33m 375[2mms[22m[39m
+     [33m[2m✓[22m[39m Sampling can delete any request [33m 559[2mms[22m[39m
+[90mstdout[2m | tests/checklist.test.ts
+[22m[39m◇ injected env (2) from .env // tip: ⌘ override existing { override: true }
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist auto-generation on En cours[2m > [22m[2mcreates 30 items when a request enters En cours
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+🆕 Nouvelle demande de sampling
+*Chk* (AO) — Marketing Test User
+0 vélo(s) — livraison à Paris pour le à confirmer
+<http://localhost:3000/requests/6a85b5d8c63a0cd49ca561f8|Voir dans SRA>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mPATCH /api/requests/:id/checklist/:itemId[2m > [22m[2mSampling can tick an item
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: test-sampling@example.com
+[GMAIL STUB] Subject: [SRA] Nouvelle demande : Chk
+[GMAIL STUB] Body:
+Une nouvelle demande de sampling a été soumise.
+
+Projet : Chk
+Type : AO
+Ville : Paris
+Demandeur : Marketing Test User (marketing-test@fifteen.eu)
+Nombre de vélos : 0
+Date de livraison souhaitée : à confirmer
+
+Voir dans SRA : http://localhost:3000/requests/6a85b5d8c63a0cd49ca561f8
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mPATCH /api/requests/:id/checklist/:itemId[2m > [22m[2mSampling can tick an item
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: marketing-test@fifteen.eu
+[GMAIL STUB] Subject: [SRA] Chk : En cours
+[GMAIL STUB] Body:
+Bonjour Marketing Test User,
+
+Le statut de votre demande "Chk" a été mis à jour.
+
+Nouveau statut : En cours
+Statut précédent : À faire
+Commentaire : start
+
+Voir la demande : http://localhost:3000/requests/6a85b5d8c63a0cd49ca561f8
+
+L'équipe Sampling
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mPATCH /api/requests/:id/checklist/:itemId[2m > [22m[2mSampling can tick an item
+[22m[39m▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+[NOTION STUB] Creating page for request 6a85b5d8c63a0cd49ca561f8
+[NOTION STUB]   Project: Chk (AO)
+[NOTION STUB]   City: Paris
+[NOTION STUB]   Requester: Marketing Test User
+[NOTION STUB]   Status: À faire
+[NOTION STUB]   Link: http://localhost:3000/requests/6a85b5d8c63a0cd49ca561f8
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mPATCH /api/requests/:id/checklist/:itemId[2m > [22m[2mSampling can tick an item
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+📌 Statut mis à jour pour *Chk*
+À faire → *En cours*
+_"start"_
+<http://localhost:3000/requests/6a85b5d8c63a0cd49ca561f8|Voir la demande>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mPATCH /api/requests/:id/checklist/:itemId[2m > [22m[2mSampling can tick an item
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+🆕 Nouvelle demande de sampling
+*Chk* (AO) — Marketing Test User
+0 vélo(s) — livraison à Paris pour le à confirmer
+<http://localhost:3000/requests/6a85b5d9c63a0cd49ca5621d|Voir dans SRA>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mPATCH /api/requests/:id/checklist/:itemId[2m > [22m[2mMarketing cannot tick (403)
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: test-sampling@example.com
+[GMAIL STUB] Subject: [SRA] Nouvelle demande : Chk
+[GMAIL STUB] Body:
+Une nouvelle demande de sampling a été soumise.
+
+Projet : Chk
+Type : AO
+Ville : Paris
+Demandeur : Marketing Test User (marketing-test@fifteen.eu)
+Nombre de vélos : 0
+Date de livraison souhaitée : à confirmer
+
+Voir dans SRA : http://localhost:3000/requests/6a85b5d9c63a0cd49ca5621d
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mPATCH /api/requests/:id/checklist/:itemId[2m > [22m[2mMarketing cannot tick (403)
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: marketing-test@fifteen.eu
+[GMAIL STUB] Subject: [SRA] Chk : En cours
+[GMAIL STUB] Body:
+Bonjour Marketing Test User,
+
+Le statut de votre demande "Chk" a été mis à jour.
+
+Nouveau statut : En cours
+Statut précédent : À faire
+Commentaire : start
+
+Voir la demande : http://localhost:3000/requests/6a85b5d9c63a0cd49ca5621d
+
+L'équipe Sampling
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mPATCH /api/requests/:id/checklist/:itemId[2m > [22m[2mMarketing cannot tick (403)
+[22m[39m▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+[NOTION STUB] Creating page for request 6a85b5d9c63a0cd49ca5621d
+[NOTION STUB]   Project: Chk (AO)
+[NOTION STUB]   City: Paris
+[NOTION STUB]   Requester: Marketing Test User
+[NOTION STUB]   Status: À faire
+[NOTION STUB]   Link: http://localhost:3000/requests/6a85b5d9c63a0cd49ca5621d
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mPATCH /api/requests/:id/checklist/:itemId[2m > [22m[2mMarketing cannot tick (403)
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+📌 Statut mis à jour pour *Chk*
+À faire → *En cours*
+_"start"_
+<http://localhost:3000/requests/6a85b5d9c63a0cd49ca5621d|Voir la demande>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mblocks the transition if checklist is incomplete
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+🆕 Nouvelle demande de sampling
+*Chk* (AO) — Marketing Test User
+0 vélo(s) — livraison à Paris pour le à confirmer
+<http://localhost:3000/requests/6a85b5d9c63a0cd49ca56243|Voir dans SRA>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mblocks the transition if checklist is incomplete
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+📌 Statut mis à jour pour *Chk*
+À faire → *En cours*
+_"start"_
+<http://localhost:3000/requests/6a85b5d9c63a0cd49ca56243|Voir la demande>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mblocks the transition if checklist is incomplete
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: test-sampling@example.com
+[GMAIL STUB] Subject: [SRA] Nouvelle demande : Chk
+[GMAIL STUB] Body:
+Une nouvelle demande de sampling a été soumise.
+
+Projet : Chk
+Type : AO
+Ville : Paris
+Demandeur : Marketing Test User (marketing-test@fifteen.eu)
+Nombre de vélos : 0
+Date de livraison souhaitée : à confirmer
+
+Voir dans SRA : http://localhost:3000/requests/6a85b5d9c63a0cd49ca56243
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mblocks the transition if checklist is incomplete
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: marketing-test@fifteen.eu
+[GMAIL STUB] Subject: [SRA] Chk : En cours
+[GMAIL STUB] Body:
+Bonjour Marketing Test User,
+
+Le statut de votre demande "Chk" a été mis à jour.
+
+Nouveau statut : En cours
+Statut précédent : À faire
+Commentaire : start
+
+Voir la demande : http://localhost:3000/requests/6a85b5d9c63a0cd49ca56243
+
+L'équipe Sampling
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mblocks the transition if checklist is incomplete
+[22m[39m▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+[NOTION STUB] Creating page for request 6a85b5d9c63a0cd49ca56243
+[NOTION STUB]   Project: Chk (AO)
+[NOTION STUB]   City: Paris
+[NOTION STUB]   Requester: Marketing Test User
+[NOTION STUB]   Status: À faire
+[NOTION STUB]   Link: http://localhost:3000/requests/6a85b5d9c63a0cd49ca56243
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mblocks the transition if checklist is incomplete
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+🆕 Nouvelle demande de sampling
+*Chk* (AO) — Marketing Test User
+0 vélo(s) — livraison à Paris pour le à confirmer
+<http://localhost:3000/requests/6a85b5dac63a0cd49ca56268|Voir dans SRA>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mblocks the transition if checklist is incomplete
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: test-sampling@example.com
+[GMAIL STUB] Subject: [SRA] Nouvelle demande : Chk
+[GMAIL STUB] Body:
+Une nouvelle demande de sampling a été soumise.
+
+Projet : Chk
+Type : AO
+Ville : Paris
+Demandeur : Marketing Test User (marketing-test@fifteen.eu)
+Nombre de vélos : 0
+Date de livraison souhaitée : à confirmer
+
+Voir dans SRA : http://localhost:3000/requests/6a85b5dac63a0cd49ca56268
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mblocks the transition if checklist is incomplete
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+📌 Statut mis à jour pour *Chk*
+À faire → *En cours*
+_"start"_
+<http://localhost:3000/requests/6a85b5dac63a0cd49ca56268|Voir la demande>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mblocks the transition if checklist is incomplete
+[22m[39m▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+[NOTION STUB] Creating page for request 6a85b5dac63a0cd49ca56268
+[NOTION STUB]   Project: Chk (AO)
+[NOTION STUB]   City: Paris
+[NOTION STUB]   Requester: Marketing Test User
+[NOTION STUB]   Status: À faire
+[NOTION STUB]   Link: http://localhost:3000/requests/6a85b5dac63a0cd49ca56268
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mallows the transition when all items are checked
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: marketing-test@fifteen.eu
+[GMAIL STUB] Subject: [SRA] Chk : En cours
+[GMAIL STUB] Body:
+Bonjour Marketing Test User,
+
+Le statut de votre demande "Chk" a été mis à jour.
+
+Nouveau statut : En cours
+Statut précédent : À faire
+Commentaire : start
+
+Voir la demande : http://localhost:3000/requests/6a85b5dac63a0cd49ca56268
+
+L'équipe Sampling
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mallows the transition when all items are checked
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: marketing-test@fifteen.eu
+[GMAIL STUB] Subject: [SRA] Chk : Prêt à tester
+[GMAIL STUB] Body:
+Bonjour Marketing Test User,
+
+Le statut de votre demande "Chk" a été mis à jour.
+
+Nouveau statut : Prêt à tester
+Statut précédent : En cours
+Commentaire : x
+
+Voir la demande : http://localhost:3000/requests/6a85b5dac63a0cd49ca56268
+
+L'équipe Sampling
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mallows the transition when all items are checked
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: marketing-test@fifteen.eu
+[GMAIL STUB] Subject: [SRA] Chk : Emballé
+[GMAIL STUB] Body:
+Bonjour Marketing Test User,
+
+Le statut de votre demande "Chk" a été mis à jour.
+
+Nouveau statut : Emballé
+Statut précédent : Prêt à tester
+Commentaire : x
+
+Voir la demande : http://localhost:3000/requests/6a85b5dac63a0cd49ca56268
+
+L'équipe Sampling
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mallows the transition when all items are checked
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+📌 Statut mis à jour pour *Chk*
+En cours → *Prêt à tester*
+_"x"_
+<http://localhost:3000/requests/6a85b5dac63a0cd49ca56268|Voir la demande>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mallows the transition when all items are checked
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+📌 Statut mis à jour pour *Chk*
+Prêt à tester → *Emballé*
+_"x"_
+<http://localhost:3000/requests/6a85b5dac63a0cd49ca56268|Voir la demande>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mallows the transition when all items are checked
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+🆕 Nouvelle demande de sampling
+*Chk* (AO) — Marketing Test User
+0 vélo(s) — livraison à Paris pour le à confirmer
+<http://localhost:3000/requests/6a85b5dbc63a0cd49ca5628f|Voir dans SRA>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mallows the transition when all items are checked
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: test-sampling@example.com
+[GMAIL STUB] Subject: [SRA] Nouvelle demande : Chk
+[GMAIL STUB] Body:
+Une nouvelle demande de sampling a été soumise.
+
+Projet : Chk
+Type : AO
+Ville : Paris
+Demandeur : Marketing Test User (marketing-test@fifteen.eu)
+Nombre de vélos : 0
+Date de livraison souhaitée : à confirmer
+
+Voir dans SRA : http://localhost:3000/requests/6a85b5dbc63a0cd49ca5628f
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mallows the transition when all items are checked
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+📌 Statut mis à jour pour *Chk*
+À faire → *En cours*
+_"start"_
+<http://localhost:3000/requests/6a85b5dbc63a0cd49ca5628f|Voir la demande>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mallows the transition when all items are checked
+[22m[39m▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+[NOTION STUB] Creating page for request 6a85b5dbc63a0cd49ca5628f
+[NOTION STUB]   Project: Chk (AO)
+[NOTION STUB]   City: Paris
+[NOTION STUB]   Requester: Marketing Test User
+[NOTION STUB]   Status: À faire
+[NOTION STUB]   Link: http://localhost:3000/requests/6a85b5dbc63a0cd49ca5628f
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mallows the transition when all items are checked
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: marketing-test@fifteen.eu
+[GMAIL STUB] Subject: [SRA] Chk : En cours
+[GMAIL STUB] Body:
+Bonjour Marketing Test User,
+
+Le statut de votre demande "Chk" a été mis à jour.
+
+Nouveau statut : En cours
+Statut précédent : À faire
+Commentaire : start
+
+Voir la demande : http://localhost:3000/requests/6a85b5dbc63a0cd49ca5628f
+
+L'équipe Sampling
+═════════════════════════════════════════
+
+[90mstdout[2m | tests/checklist.test.ts[2m > [22m[2mChecklist gate on Prêt à enlever[2m > [22m[2mallows the transition when all items are checked
+[22m[39m─────────────────────────────────────────
+[SLACK STUB] Channel: #test-sampling
+[SLACK STUB] Text:
+📌 Statut mis à jour pour *Chk*
+En cours → *Prêt à tester*
+_"x"_
+<http://localhost:3000/requests/6a85b5dbc63a0cd49ca5628f|Voir la demande>
+─────────────────────────────────────────
+
+[90mstdout[2m | tests/checklist.test.ts
+[22m[39m═════════════════════════════════════════
+[GMAIL STUB] To: marketing-test@fifteen.eu
+[GMAIL STUB] Subject: [SRA] Chk : Prêt à tester
+[GMAIL STUB] Body:
+Bonjour Marketing Test User,
+
+Le statut de votre demande "Chk" a été mis à jour.
+
+Nouveau statut : Prêt à tester
+Statut précédent : En cours
+Commentaire : x
+
+Voir la demande : http://localhost:3000/requests/6a85b5dbc63a0cd49ca5628f
+
+L'équipe Sampling
+═════════════════════════════════════════
+
+ [32m✓[39m tests/checklist.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 3949[2mms[22m[39m
+     [33m[2m✓[22m[39m creates 30 items when a request enters En cours [33m 1021[2mms[22m[39m
+     [33m[2m✓[22m[39m Sampling can tick an item [33m 689[2mms[22m[39m
+     [33m[2m✓[22m[39m Marketing cannot tick (403) [33m 652[2mms[22m[39m
+     [33m[2m✓[22m[39m blocks the transition if checklist is incomplete [33m 655[2mms[22m[39m
+     [33m[2m✓[22m[39m allows the transition when all items are checked [33m 743[2mms[22m[39m
+[90mstdout[2m | postMessage (C:\Users\Soufiane REMMAL\Projects\SRA_Web\backend\src\integrations\slack.client.ts:19:11)
+[22m[39m─────────────────────────────────────────
+
+[90mstdout[2m | postMessage (C:\Users\Soufiane REMMAL\Projects\SRA_Web\backend\src\integrations\slack.client.ts:20:11)
+[22m[39m[SLACK STUB] Channel: #test-sampling
+
+[90mstdout[2m | postMessage (C:\Users\Soufiane REMMAL\Projects\SRA_Web\backend\src\integrations\slack.client.ts:21:11)
+[22m[39m[SLACK STUB] Text:
+
+[90mstdout[2m | postMessage (C:\Users\Soufiane REMMAL\Projects\SRA_Web\backend\src\integrations\slack.client.ts:22:11)
+[22m[39m📌 Statut mis à jour pour *Chk*
+Prêt à tester → *Emballé*
+_"x"_
+<http://localhost:3000/requests/6a85b5dbc63a0cd49ca5628f|Voir la demande>
+
+[90mstdout[2m | postMessage (C:\Users\Soufiane REMMAL\Projects\SRA_Web\backend\src\integrations\slack.client.ts:23:11)
+[22m[39m─────────────────────────────────────────
+
+[90mstdout[2m | tests/feedback.test.ts
+[22m[39m◇ injected env (2) from .env // tip: ⌘ suppress logs { quiet: true }
+
+ [32m✓[39m tests/feedback.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 2385[2mms[22m[39m
+     [33m[2m✓[22m[39m accepts standalone feedback [33m 455[2mms[22m[39m
+     [33m[2m✓[22m[39m Marketing sees only their own [33m 625[2mms[22m[39m
+     [33m[2m✓[22m[39m Sampling sees all [33m 565[2mms[22m[39m
+[90mstdout[2m | tests/auth.test.ts
+[22m[39m◇ injected env (2) from .env // tip: ⌘ enable debugging { debug: true }
+
+ [32m✓[39m tests/auth.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 2113[2mms[22m[39m
+     [33m[2m✓[22m[39m logs in with valid credentials and returns a JWT + user [33m 709[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects wrong password with 401 [33m 590[2mms[22m[39m
+     [33m[2m✓[22m[39m returns the authenticated user [33m 430[2mms[22m[39m
+[90mstdout[2m | tests/notifications.test.ts
+[22m[39m◇ injected env (2) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+
+ [32m✓[39m tests/notifications.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 1796[2mms[22m[39m
+     [33m[2m✓[22m[39m returns pre-filled subject and body [33m 805[2mms[22m[39m
+     [33m[2m✓[22m[39m submit returns 200 immediately, notifications kick off in background [33m 716[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m39 passed[39m[22m[90m (39)[39m
+[2m   Start at [22m 15:55:15
+[2m   Duration [22m 40.27s[2m (transform 1.08s, setup 7.74s, import 7.22s, tests 20.98s, environment 1ms)[22m
+

@@ -4,7 +4,7 @@ import { createFeedback, listFeedback, FeedbackError } from './service';
 
 const createSchema = z.object({
   category: z.enum(['Bug', 'Suggestion', 'Process issue']),
-  text: z.string().min(1, 'Text is required'),
+  text: z.string().trim().min(1, 'Text is required'),
   requestId: z.string().optional(),
 });
 
