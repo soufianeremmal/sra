@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import authRoutes from './modules/auth/routes';
 import requestRoutes from './modules/requests/routes';
 import { bikesGlobalRouter, bikesForRequestRouter } from './modules/bikes/routes';
+import checklistRoutes from './modules/checklist/routes';
 
 dotenv.config();
 
@@ -24,6 +25,8 @@ app.use('/api/requests', requestRoutes);
 
 app.use('/api/bikes', bikesGlobalRouter);
 app.use('/api/requests/:id/bikes', bikesForRequestRouter);
+
+app.use('/api/requests/:id/checklist', checklistRoutes);
 
 async function start() {
   try {

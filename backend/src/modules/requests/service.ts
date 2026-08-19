@@ -2,7 +2,7 @@ import { Types } from 'mongoose';
 import { Request, IRequest, RequestStatus } from './models/request.model';
 import { AuditLog } from './models/audit-log.model';
 import { canTransition } from './state-machine';
-
+import { generateChecklistForRequest, isChecklistComplete, countUncheckedItems } from '../checklist/service';
 export class TransitionError extends Error {
   constructor(message: string) {
     super(message);
@@ -68,9 +68,25 @@ export async function changeStatus(input: {
     );
   }
 
+  // GATE: cannot move to "Prêt à enlever" unless checklist is complete
+  if (input.newStatus === 'Prêt à enlever') {
+    const complete = await isChecklistComplete(doc._id);
+    if (!complete) {
+      const missing = await countUncheckedItems(doc._id);
+      throw new TransitionError(
+        `Checklist incomplete — ${missing} item${missing > 1 ? 's' : ''} still unchecked`
+      );
+    }
+  }
+
   const previousStatus = doc.status;
   doc.status = input.newStatus;
   await doc.save();
+
+  // HOOK: generate checklist the first time this request enters "En cours"
+  if (input.newStatus === 'En cours') {
+    await generateChecklistForRequest(doc._id, input.actorId);
+  }
 
   await AuditLog.create({
     requestId: doc._id,
