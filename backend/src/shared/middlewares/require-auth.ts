@@ -30,6 +30,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as AuthPayload;
     req.user = decoded;
+    res.setHeader('Cache-Control', 'no-store');
     next();
   } catch {
     return res.status(401).json({ error: 'Invalid or expired token' });

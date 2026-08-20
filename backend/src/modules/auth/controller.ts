@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import { loginWithEmailAndPassword } from './service';
+import { User } from './model';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -21,5 +22,19 @@ export async function login(req: Request, res: Response) {
   }
 }
 export async function me(req: Request, res: Response) {
-  return res.json({ user: req.user });
-} 
+  if (!req.user) return res.status(401).json({ error: 'Not authenticated' });
+
+  const user = await User.findById(req.user.userId).select('email name role');
+  if (!user) return res.status(401).json({ error: 'User not found' });
+
+  res.setHeader('Cache-Control', 'no-store'); 
+  
+  return res.json({
+    user: {
+      id: user._id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    },
+  });
+}
