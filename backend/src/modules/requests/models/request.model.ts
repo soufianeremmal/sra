@@ -3,7 +3,26 @@ import { Schema, model, Document, Types } from 'mongoose';
 // --- Enums / union types ---
 
 export type RequestType = 'Sample' | 'Démo' | 'Salon' | 'AO';
+export type StationEquipmentType = 'e-Dock' | 'Maintenance dock' | 'Totem' | 'Weight plate' | 'Guiding band' | 'Stickers';
 
+export interface IStationEquipmentItem {
+  type: StationEquipmentType;
+  quantity: number;
+  needsCharging?: boolean;   // only meaningful for e-Dock
+}
+
+const stationEquipmentItemSchema = new Schema<IStationEquipmentItem>(
+  {
+    type: {
+      type: String,
+      enum: ['e-Dock', 'Maintenance dock', 'Totem', 'Weight plate', 'Guiding band', 'Stickers'],
+      required: true,
+    },
+    quantity: { type: Number, required: true, min: 0 },
+    needsCharging: { type: Boolean },
+  },
+  { _id: false }
+);
 export type RequestStatus =
   | 'Draft'
   | 'À faire'
@@ -56,27 +75,13 @@ const marketingMaterialItemSchema = new Schema<IMarketingMaterialItem>(
 
 export interface IStationSection {
   stationNeeded: boolean;
-  stationType?: StationType;
-  needsCharging?: boolean;
-  stationQuantity?: number;
-  maintenanceDock?: number;
-  weightPlate?: number;
-  guidingBand?: number;
-  stickers?: number;
-  totem?: number;
+  equipment?: IStationEquipmentItem[];
 }
 
 const stationSectionSchema = new Schema<IStationSection>(
   {
     stationNeeded: { type: Boolean, default: false },
-    stationType: { type: String, enum: ['e-dock', 'Maintenance dock'] },
-    needsCharging: { type: Boolean },
-    stationQuantity: { type: Number, min: 0 },
-    maintenanceDock: { type: Number, min: 0 },
-    weightPlate: { type: Number, min: 0 },
-    guidingBand: { type: Number, min: 0 },
-    stickers: { type: Number, min: 0 },
-    totem: { type: Number, min: 0 },
+    equipment: { type: [stationEquipmentItemSchema], default: [] },
   },
   { _id: false }
 );

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { requireAuth } from '../../shared/middlewares/require-auth';
 import { requireRole } from '../../shared/middlewares/require-role';
-import { create, list, getOne, submit, updateStatus, update, remove, generateEmail } from './controller';
+import { create, list, getOne, submit, updateStatus, update, remove, generateEmail, audit } from './controller';
 
 const router = Router();
 
@@ -21,4 +21,6 @@ router.patch('/:id/status', requireAuth, requireRole('sampling_admin'), updateSt
 // Delete — Marketing can delete own drafts, Sampling can delete anything
 router.delete('/:id', requireAuth, remove);
 
+// Audit 
+router.get('/:id/audit', requireAuth, audit);
 export default router;

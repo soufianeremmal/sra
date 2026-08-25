@@ -23,6 +23,26 @@ const router = createRouter({
       meta: { requiresAuth: true, role: 'sampling_admin' },
     },
     {
+      path: '/requests/:id/edit',
+      name: 'request-edit',
+      component: () => import('../views/RequestEditView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/requests/:id',
+      name: 'request-detail',
+      component: () => import('../views/RequestDetailView.vue'),
+        
+      meta: { requiresAuth: true },
+        
+    },
+    {
+      path: '/feedback',
+      name: 'feedback',
+      component: () => import('../views/FeedbackView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/',
       redirect: () => {
         const auth = useAuthStore();

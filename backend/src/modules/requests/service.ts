@@ -221,3 +221,9 @@ export async function deleteRequest(input: {
   await doc.deleteOne();
   return { deleted: true };
 }
+export async function listAuditForRequest(requestId: string) {
+  if (!Types.ObjectId.isValid(requestId)) return [];
+  return AuditLog.find({ requestId: new Types.ObjectId(requestId) })
+    .populate('byUser', 'name email role')
+    .sort({ createdAt: -1 });
+}

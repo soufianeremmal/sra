@@ -7,6 +7,7 @@ import {
   changeStatus,
   updateRequestFields,
   deleteRequest,
+  listAuditForRequest,
   TransitionError,
   PermissionError,
 } from './service';
@@ -40,14 +41,11 @@ const updateFieldsSchema = z.object({
   })).optional(),
   station: z.object({
     stationNeeded: z.boolean(),
-    stationType: z.enum(['e-dock', 'Maintenance dock']).optional(),
-    needsCharging: z.boolean().optional(),
-    stationQuantity: z.number().int().min(0).optional(),
-    maintenanceDock: z.number().int().min(0).optional(),
-    weightPlate: z.number().int().min(0).optional(),
-    guidingBand: z.number().int().min(0).optional(),
-    stickers: z.number().int().min(0).optional(),
-    totem: z.number().int().min(0).optional(),
+    equipment: z.array(z.object({
+      type: z.enum(['e-Dock', 'Maintenance dock', 'Totem', 'Weight plate', 'Guiding band', 'Stickers']),
+      quantity: z.number().int().min(0),
+      needsCharging: z.boolean().optional(),
+    })).optional(),
   }).optional(),
   accessories: z.object({
     phone: z.number().int().min(0).optional(),
@@ -207,4 +205,13 @@ export async function generateEmail(req: ExpressRequest, res: Response) {
 
   const email = generateClientEmailForRequest({ request: doc, requester });
   return res.json(email);
+}
+export async function audit(req: ExpressRequest, res: Response) {
+  if (!req.user) return res.status(401).json({ error: 'Not authenticated' });
+
+  const doc = await getRequestById(req.params.id);
+  if (!doc) return res.status(404).json({ error: 'Request not found' });
+
+  const entries = await listAuditForRequest(req.params.id);
+  return res.json(entries);
 }
